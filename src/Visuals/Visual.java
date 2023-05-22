@@ -1,12 +1,27 @@
+package Visuals;
+
+import Logic.CreateVBDEvent;
+import Logic.Structure;
+import Logic.VBDcreatorListener;
+import Visuals.LeftPanel;
+import Visuals.MidPanel;
+import Visuals.RightPanel;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class Visual extends JFrame {
 
-    Visual(){
+    public Visual(){
         LeftPanel leftPanel = new LeftPanel();
         RightPanel rightPanel = new RightPanel();
         MidPanel midPanel = new MidPanel();
+        leftPanel.addListener(new VBDcreatorListener() {
+        @Override
+        public void VBDcreated(CreateVBDEvent cve) {
+                Structure.VBDcreated(cve);
+            }
+        });
 
         this.setLayout(new BorderLayout());
         this.add(leftPanel,BorderLayout.LINE_START);

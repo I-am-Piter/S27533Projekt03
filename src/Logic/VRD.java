@@ -1,3 +1,5 @@
+package Logic;
+
 public class VRD extends Thread{
 
     boolean stillWork;

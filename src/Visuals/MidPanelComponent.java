@@ -1,3 +1,5 @@
+package Visuals;
+
 import javax.swing.*;
 import java.awt.*;
 

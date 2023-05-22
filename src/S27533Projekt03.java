@@ -1,3 +1,5 @@
+import Visuals.Visual;
+
 import javax.swing.*;
 
 public class S27533Projekt03 {
