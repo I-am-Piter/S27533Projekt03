@@ -124,6 +124,7 @@ public class Structure implements ViewToLogic {
         BSC bsc = new BSC(0);
         ArrayList<BSC> bscsLine = new ArrayList<>();
         bscsLine.add(bsc);
+        ltv.BSCcreated(bsc.line,bsc.id);
         BSCs[0] = bscsLine;
     }
 
@@ -134,6 +135,7 @@ public class Structure implements ViewToLogic {
             tmp[i] = BSCs[i];
         }
         ArrayList<BSC> bscsLine = new ArrayList<>();
+        bsc.start();
         bscsLine.add(bsc);
         tmp[tmp.length-1] = bscsLine;
     }
@@ -145,6 +147,7 @@ public class Structure implements ViewToLogic {
             }
         }
         BSCs[warstwa].get(leastSMSindex).SMS.add(sms);
+        ltv.dataUpdated(BSCs[warstwa].get(leastSMSindex).id,BSCs[warstwa].get(leastSMSindex).sent,BSCs[warstwa].get(leastSMSindex).SMS.size(),TYPE.BSC);
         if(BSCs[warstwa].get(leastSMSindex).SMS.size() > 5){
             createNewBSC(warstwa);
         }
@@ -152,6 +155,8 @@ public class Structure implements ViewToLogic {
 
     private static void createNewBSC(int warstwa) {
         BSC newBSC = new BSC(warstwa);
+        newBSC.start();
+        ltv.BSCcreated(warstwa, newBSC.id);
         BSCs[warstwa].add(newBSC);
     }
 
@@ -163,6 +168,7 @@ public class Structure implements ViewToLogic {
             }
         }
         leftBTSs.get(leastSMSindex).SMS.add(sms);
+        ltv.dataUpdated(leftBTSs.get(leastSMSindex).id,leftBTSs.get(leastSMSindex).sent,leftBTSs.get(leastSMSindex).SMS.size(),TYPE.BTS);
         if(leftBTSs.get(leastSMSindex).SMS.size() > 5){
             createNewLeftBTS();
         }
@@ -170,11 +176,13 @@ public class Structure implements ViewToLogic {
     }
     public static void createNewLeftBTS(){
         BTS bts = new BTS(Mode.LEFT);
+        bts.start();
         leftBTSs.add(bts);
         ltv.BTScreated(Mode.LEFT,bts.id);
     }
 
     public static void rightReceiveSMS(String sms){
+        System.out.println("sms received");
         int leastSMSindex = 0;
         for (int i = 1; i < rightBTSs.size(); i++) {
             if(rightBTSs.get(i).SMS.size() < rightBTSs.get(leastSMSindex).SMS.size()){
@@ -182,13 +190,16 @@ public class Structure implements ViewToLogic {
             }
         }
         rightBTSs.get(leastSMSindex).SMS.add(sms);
+        ltv.dataUpdated(rightBTSs.get(leastSMSindex).id,rightBTSs.get(leastSMSindex).sent,rightBTSs.get(leastSMSindex).SMS.size(),TYPE.BTS);
         if(rightBTSs.get(leastSMSindex).SMS.size() > 5){
             createNewRightBTS();
         }
     }
     public static void createNewRightBTS(){
         BTS bts = new BTS(Mode.RIGHT);
+        bts.start();
         rightBTSs.add(bts);
+        ltv.BTScreated(Mode.RIGHT,bts.id);
     }
 
     public static void vrdReceiveSMS(String sms){

@@ -4,9 +4,10 @@ import java.util.ArrayList;
 
 public class BSC extends Thread{
     ArrayList<String> SMS;
-    public int id;
+    int id;
+    int sent;
     private static int lastIndex = 0;
-    private int line;
+     int line;
 
     BSC(int line){
         this.SMS = new ArrayList<>();
@@ -23,6 +24,7 @@ public class BSC extends Thread{
                 throw new RuntimeException(e);
             }
             if(SMS.size()>0){
+                sent++;
                 if(Structure.BSCs.length>line+1){
                     Structure.bscReceiveSMS(SMS.get(0),line+1);
                     SMS.remove(0);

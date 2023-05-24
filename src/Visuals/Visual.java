@@ -4,6 +4,7 @@ import Connectors.LogicToView;
 import Connectors.ViewToLogic;
 import Logic.Mode;
 import Logic.Structure;
+import Logic.TYPE;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +26,7 @@ public class Visual extends JFrame implements LogicToView {
         this.add(midPanel,BorderLayout.CENTER);
 
         this.setVisible(true);
-        this.setSize(new Dimension(900,300));
+        this.setSize(new Dimension(1200,300));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         vtl.createSTRUCTURE();
     }
@@ -46,4 +47,13 @@ public class Visual extends JFrame implements LogicToView {
     public void BSCcreated(int warstwa, int id) {
         midPanel.BSCcreated(warstwa,id);
     }
+
+    @Override
+    public void dataUpdated(int id, int sent, int queue, TYPE type) {
+        midPanel.dataUpdated(id,sent,queue,type);
+    }
+//    @Override
+//    public void BSCdataUpdated(int id, int sent, int queue, TYPE type) {
+//        midPanel.BSCdataUpdated(id,sent,queue,type);
+//    }
 }

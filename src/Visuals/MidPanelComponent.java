@@ -27,4 +27,8 @@ public class MidPanelComponent extends JPanel {
         this.add(SMScount);
         this.add(SMSqueue);
     }
+    public void refreshData(int sent, int queue){
+        SMScount.setText(String.valueOf(sent));
+        SMSqueue.setText(String.valueOf(queue));
+    }
 }
