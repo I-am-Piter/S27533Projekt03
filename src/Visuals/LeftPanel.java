@@ -1,8 +1,7 @@
 package Visuals;
 
-import Logic.CreateVBDEvent;
+import Connectors.ViewToLogic;
 import Logic.VBD;
-import Logic.VBDcreatorListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class LeftPanel extends JPanel {
+    static ViewToLogic vtl;
     private JScrollPane jScrollPane;
     private JPanel scrollPanel;
     private JButton jButton;
@@ -28,8 +28,7 @@ public class LeftPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFrame frame = new JFrame();
-                String sms = "";
-                JTextField textField = new JTextField(sms);
+                JTextField textField = new JTextField();
                 JButton button = new JButton("OK.");
                 frame.setLayout(new BorderLayout());
                 frame.add(textField,BorderLayout.PAGE_START);
@@ -40,30 +39,22 @@ public class LeftPanel extends JPanel {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         frame.setVisible(false);
-                        fireCreateObject(sms);
-                        newVBD();
+                        String sms = textField.getText();
+                        newVBD(vtl.createVBD(sms));
                     }
                 });
             }
         });
     }
-    public void newVBD(){
-        LeftPanelComponent lpc = new LeftPanelComponent();
-        scrollPanel.add(lpc);
+    public void removeMe(LeftPanelComponent lpc){
+        scrollPanel.remove(lpc);
         scrollPanel.revalidate();
         scrollPanel.repaint();
     }
-    private ArrayList<VBDcreatorListener> listeners = new ArrayList<>();
-    public void addListener(VBDcreatorListener vcl){
-        this.listeners.add(vcl);
-    }
-    public void removeListener(VBDcreatorListener vcl){
-        this.listeners.remove(vcl);
-    }
-    public void fireCreateObject(String sms){
-        CreateVBDEvent cve = new CreateVBDEvent(this,sms);
-        for(VBDcreatorListener vcl:listeners){
-            vcl.VBDcreated(cve);
-        }
+    public void newVBD(int serial){
+        LeftPanelComponent lpc = new LeftPanelComponent(serial,this,vtl);
+        scrollPanel.add(lpc);
+        scrollPanel.revalidate();
+        scrollPanel.repaint();
     }
 }

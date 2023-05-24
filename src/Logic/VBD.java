@@ -11,29 +11,41 @@ public class VBD extends Thread{
 
     VBD(String SMS){
         this.SMS = SMS;
-        frequency = 1;
+        frequency = 1000;
         stillWork = true;
         serialNum = ++lastSerial;
         status = Status.ACTIVE;
     }
 
     public void setFrequency(int freq){
-        frequency = freq;
+        synchronized (this) {
+            frequency = freq;
+        }
     }
-    public void setStillWork(boolean work){
-        stillWork = work;
+    public void stopVBD(){
+        stillWork = false;
     }
     public void setStatus(Status stat){
-        status = stat;
+        synchronized (this) {
+            status = stat;
+        }
     }
-    public int getFrequency(){
-        return frequency;
+    @Override
+    public void run() {
+        while(stillWork) {
+            while(stillWork&&status.status) {
+                Structure.leftReceiveSMS(SMS);
+                try {
+                    this.sleep(frequency);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            try {
+                this.sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
-    public Status getStatus(){
-        return status;
-    }
-    public int getSerial(){
-        return serialNum;
-    }
-
 }

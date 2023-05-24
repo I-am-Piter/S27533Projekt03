@@ -1,11 +1,14 @@
 package Visuals;
 
+import Connectors.ViewToLogic;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class RightPanel extends JPanel {
+    static ViewToLogic vtl;
     private JScrollPane jScrollPane;
     private JButton jButton;
     private JPanel scrollPanel;
@@ -23,11 +26,19 @@ public class RightPanel extends JPanel {
         jButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                RightPanelComponent rpc = new RightPanelComponent();
-                scrollPanel.add(rpc);
-                scrollPanel.revalidate();
-                scrollPanel.repaint();
+                newRPC();
             }
         });
+    }
+    public void removeMe(RightPanelComponent rpc){
+        scrollPanel.remove(rpc);
+        scrollPanel.revalidate();
+        scrollPanel.repaint();
+    }
+    public void newRPC(){
+        RightPanelComponent rpc = new RightPanelComponent(vtl.createVRD(),this,vtl);
+        scrollPanel.add(rpc);
+        scrollPanel.revalidate();
+        scrollPanel.repaint();
     }
 }
