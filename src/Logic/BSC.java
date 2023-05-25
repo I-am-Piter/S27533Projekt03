@@ -3,7 +3,7 @@ package Logic;
 import java.util.ArrayList;
 
 public class BSC extends Thread{
-    ArrayList<String> SMS;
+    ArrayList<byte[]> SMS;
     int id;
     int sent;
     private static int lastIndex = 0;
@@ -23,16 +23,31 @@ public class BSC extends Thread{
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            if(SMS.size()>0){
-                sent++;
-                if(Structure.BSCs.length>line+1){
-                    Structure.bscReceiveSMS(SMS.get(0),line+1);
-                    SMS.remove(0);
-                }else{
-                    Structure.rightReceiveSMS(SMS.get(0));
-                    SMS.remove(0);
-                }
-            }
+            pushSMS();
         }
+    }
+    public void pushSMS(){
+        if(SMS.size()>0){
+            sent++;
+            if(Structure.BSCs.length>line+1){
+                Structure.bscReceiveSMS(SMS.get(0),line+1);
+                SMS.remove(0);
+            }else{
+                Structure.rightReceiveSMS(SMS.get(0));
+                SMS.remove(0);
+            }
+            Structure.BSCdataChagned(id);
+        }
+    }
+    public void pushALl(){
+        for (byte[] pdu:SMS) {
+            pushSMS();
+        }
+    }
+    public int getSent(){
+        return sent;
+    }
+    public int getCount(){
+        return SMS.size();
     }
 }

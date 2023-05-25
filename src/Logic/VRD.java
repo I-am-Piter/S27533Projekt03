@@ -27,15 +27,10 @@ public class VRD extends Thread{
     public void setDeleter(boolean isSelected){
         deleter.work = isSelected;
     }
+    public void receiveSMS(byte[] sms){
+        SMSnum++;
+    }
     @Override
     public void run() {
-        while(stillWork) {
-            System.out.println("vrd " + id);
-            try {
-                this.sleep(500);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 }

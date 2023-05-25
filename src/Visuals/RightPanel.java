@@ -6,13 +6,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class RightPanel extends JPanel {
     static ViewToLogic vtl;
     private JScrollPane jScrollPane;
     private JButton jButton;
     private JPanel scrollPanel;
+    private ArrayList<RightPanelComponent> panele;
     RightPanel(){
+        this.panele = new ArrayList<>();
         this.jButton = new JButton("add");
         this.scrollPanel = new JPanel();
         scrollPanel.setLayout(new BoxLayout(scrollPanel, BoxLayout.PAGE_AXIS));
@@ -37,8 +40,16 @@ public class RightPanel extends JPanel {
     }
     public void newRPC(){
         RightPanelComponent rpc = new RightPanelComponent(vtl.createVRD(),this,vtl);
+        panele.add(rpc);
         scrollPanel.add(rpc);
         scrollPanel.revalidate();
         scrollPanel.repaint();
+    }
+    public void VRDdataChanged(int id) {
+        for(RightPanelComponent rpc:panele){
+            if(rpc.id == id){
+                rpc.VRDdataChanged();
+            }
+        }
     }
 }

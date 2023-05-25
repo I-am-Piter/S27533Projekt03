@@ -21,14 +21,14 @@ public class MidPanelComponent extends JPanel {
         this.SMScount = new JLabel("sent: " + String.valueOf(vtl.getBtsSent(type,id)));
         this.SMSqueue = new JLabel("queue: " + String.valueOf(vtl.getBtsSmsCount(type,id)));
 
-        this.setSize(new Dimension(50,50));
+        this.setSize(new Dimension(100,50));
         this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
         this.add(Jid);
         this.add(SMScount);
         this.add(SMSqueue);
     }
     public void refreshData(int sent, int queue){
-        SMScount.setText(String.valueOf(sent));
-        SMSqueue.setText(String.valueOf(queue));
+        SMScount.setText("sent: " + String.valueOf(sent));
+        SMSqueue.setText("queue: " + String.valueOf(queue));
     }
 }

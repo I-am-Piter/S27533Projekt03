@@ -3,7 +3,7 @@ package Logic;
 import java.util.ArrayList;
 
 public class BTS extends Thread{
-    ArrayList<String> SMS;
+    ArrayList<byte[]> SMS;
     public int id;
     public int sent;
     public Mode mode;
@@ -13,6 +13,12 @@ public class BTS extends Thread{
         this.mode = mode;
         this.id = ++lastIndex;
         this.SMS = new ArrayList<>();
+    }
+    public int getSent(){
+            return sent;
+    }
+    public int getSmsCount(){
+            return SMS.size();
     }
 
     @Override
@@ -32,6 +38,7 @@ public class BTS extends Thread{
                     Structure.vrdReceiveSMS(SMS.get(0));
                     SMS.remove(0);
                 }
+                Structure.BTSdataChagned(id);
             }
         }
     }

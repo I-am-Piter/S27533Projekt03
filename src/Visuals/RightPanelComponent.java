@@ -1,6 +1,7 @@
 package Visuals;
 
 import Connectors.ViewToLogic;
+import Logic.Structure;
 
 import javax.naming.ldap.Control;
 import javax.swing.*;
@@ -13,7 +14,7 @@ public class RightPanelComponent extends JPanel {
     private JButton endVRD;
     private JLabel smsCount;
     private JCheckBox delSMS10;
-    private int id;
+    public int id;
     private RightPanel rp;
     RightPanelComponent(int id,RightPanel rp,ViewToLogic vtl){
         this.vtl = vtl;
@@ -29,7 +30,7 @@ public class RightPanelComponent extends JPanel {
             }
         });
 
-        this.smsCount = new JLabel("count");
+        this.smsCount = new JLabel("received 0");
 
         this.delSMS10 = new JCheckBox("10s del");
         delSMS10.addActionListener(new ActionListener() {
@@ -46,6 +47,10 @@ public class RightPanelComponent extends JPanel {
         this.add(delSMS10);
         this.setPreferredSize(new Dimension(270,80));
         this.setBorder(BorderFactory.createLineBorder(Color.black));
+    }
+
+    public void VRDdataChanged(){
+        smsCount.setText("received " + vtl.getVrdSmsCount(id));
     }
 
 }
