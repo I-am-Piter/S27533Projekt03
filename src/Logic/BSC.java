@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class BSC extends Thread{
     ArrayList<byte[]> SMS;
+    ArrayList<BSCTimer> timers;
     int id;
     int sent;
     private static int lastIndex = 0;
@@ -11,22 +12,16 @@ public class BSC extends Thread{
      boolean stillrun;
 
     BSC(int line){
+        this.timers = new ArrayList<>();
         this.stillrun = true;
         this.SMS = new ArrayList<>();
         this.id = ++lastIndex;
         this.line = line;
     }
 
-    @Override
-    public void run() {
-        while(stillrun){
-            try {
-                this.sleep(3000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            pushSMS();
-        }
+    public void receiveSMS(byte[] sms){
+        timers.add(new BSCTimer(this));
+        SMS.add(sms);
     }
     public synchronized void pushSMS(){
         if(SMS.size()>0){
@@ -58,4 +53,5 @@ public class BSC extends Thread{
     public int getCount(){
         return SMS.size();
     }
+
 }

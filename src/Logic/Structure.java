@@ -249,7 +249,7 @@ public class Structure implements ViewToLogic {
                 leastSMSindex = i;
             }
         }
-        BSCs[warstwa].get(leastSMSindex).SMS.add(sms);
+        BSCs[warstwa].get(leastSMSindex).receiveSMS(sms);
 
         ltv.dataUpdated(BSCs[warstwa].get(leastSMSindex).id, BSCs[warstwa].get(leastSMSindex).sent, BSCs[warstwa].get(leastSMSindex).SMS.size(), TYPE.BSC);
         if (BSCs[warstwa].get(leastSMSindex).SMS.size() >= 5) {
@@ -271,7 +271,7 @@ public class Structure implements ViewToLogic {
                 leastSMSindex = i;
             }
         }
-        leftBTSs.get(leastSMSindex).SMS.add(sms);
+        leftBTSs.get(leastSMSindex).receiveSMS(sms);
         ltv.dataUpdated(leftBTSs.get(leastSMSindex).id, leftBTSs.get(leastSMSindex).sent, leftBTSs.get(leastSMSindex).SMS.size(), TYPE.BTS);
         if(leftBTSs.get(leastSMSindex).SMS.size() >= 5){
             createNewLeftBTS();
@@ -292,7 +292,7 @@ public class Structure implements ViewToLogic {
                 leastSMSindex = i;
             }
         }
-        rightBTSs.get(leastSMSindex).SMS.add(sms);
+        rightBTSs.get(leastSMSindex).receiveSMS(sms);
         ltv.dataUpdated(rightBTSs.get(leastSMSindex).id, rightBTSs.get(leastSMSindex).sent, rightBTSs.get(leastSMSindex).SMS.size(), TYPE.BTS);
         if(rightBTSs.get(leastSMSindex).SMS.size() >= 5){
             createNewRightBTS();

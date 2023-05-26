@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class BTS extends Thread{
     ArrayList<byte[]> SMS;
+    ArrayList<BTSTimer> timers;
     public int id;
     public int sent;
     public Mode mode;
@@ -13,6 +14,7 @@ public class BTS extends Thread{
         this.mode = mode;
         this.id = ++lastIndex;
         this.SMS = new ArrayList<>();
+        this.timers = new ArrayList<>();
     }
     public int getSent(){
             return sent;
@@ -20,27 +22,23 @@ public class BTS extends Thread{
     public int getSmsCount(){
             return SMS.size();
     }
+    public void receiveSMS(byte[] sms){
+        timers.add(new BTSTimer(this));
+        SMS.add(sms);
+    }
 
-    @Override
-    public void run() {
-        while(true){
-            try {
-                this.sleep(1000*(int)((Math.random()*10)+5));
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            if(SMS.size()>0){
-                sent++;
-                if(mode == Mode.LEFT) {
-                    Structure.bscReceiveSMS(SMS.get(0), 0);
-                    SMS.remove(0);
-                }else{
-                    Structure.vrdReceiveSMS(SMS.get(0));
-                    SMS.remove(0);
-                }
-                Structure.BTSdataChagned(id);
-            }
+    public void sendSMS(){
+        sent++;
+        if(mode == Mode.LEFT) {
+            Structure.bscReceiveSMS(SMS.get(0), 0);
+            SMS.remove(0);
+            timers.remove(0);
+        }else{
+            Structure.vrdReceiveSMS(SMS.get(0));
+            SMS.remove(0);
+            timers.remove(0);
         }
+        Structure.BTSdataChagned(id);
     }
 
 }
