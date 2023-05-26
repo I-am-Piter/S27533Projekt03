@@ -11,5 +11,5 @@ public interface LogicToView {
     public void VRDdataChanged(int id);
     public void BTSdataChanged(int id);
     public void BSCdataChanged(int id);
-    void rmlayer(int layerLeastSms);
+    public void rmlayer(int layerLeastSms);
 }

@@ -86,7 +86,7 @@ public class MidPanel extends JPanel {
 
     }
 
-    public void BTScreated(Mode mode, int id) {
+    public synchronized void BTScreated(Mode mode, int id) {
         if (mode == Mode.LEFT) {
             MidPanelComponent mpc = new MidPanelComponent(vtl, id, TYPE.BTS);
             mpc.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -104,13 +104,13 @@ public class MidPanel extends JPanel {
         }
     }
 
-    public void createBSClayer() {
+    public synchronized void createBSClayer() {
         BSCPanel layer = new BSCPanel(vtl);
         BSCs.add(layer);
         BSClayers.add(layer);
     }
 
-    public void BSCcreated(int warstwa, int id) {
+    public synchronized void BSCcreated(int warstwa, int id) {
         MidPanelComponent mpc = new MidPanelComponent(vtl, id, TYPE.BSC);
         mpc.setBorder(BorderFactory.createLineBorder(Color.black));
         components.add(mpc);
@@ -119,7 +119,7 @@ public class MidPanel extends JPanel {
         mainPanel.repaint();
     }
 
-    public void dataUpdated(int id, int sent, int queue, TYPE type) {
+    public synchronized void dataUpdated(int id, int sent, int queue, TYPE type) {
         for (MidPanelComponent comp : components) {
             if ((comp.id == id) && (comp.type == type)) {
                 comp.refreshData(sent, queue);
@@ -127,7 +127,7 @@ public class MidPanel extends JPanel {
         }
     }
 
-    public void rmlayer(int layerLeastSms) {
+    public synchronized void rmlayer(int layerLeastSms) {
         BSClayers.get(layerLeastSms).removeAll();
         BSCs.remove(BSClayers.get(layerLeastSms));
         {
@@ -138,7 +138,7 @@ public class MidPanel extends JPanel {
         }
     }
 
-    public void BTSdataChanged(int id){
+    public synchronized void BTSdataChanged(int id){
         for (MidPanelComponent mps : components) {
             if ((mps.type == TYPE.BTS) && (mps.id == id)) {
                 mps.refreshData(vtl.getBtsSent(TYPE.BTS, id), vtl.getBtsSmsCount(TYPE.BTS, id));
@@ -147,7 +147,7 @@ public class MidPanel extends JPanel {
     }
 
 
-    public void BSCdataChanged (int id){
+    public synchronized void BSCdataChanged (int id){
         for (MidPanelComponent mps : components) {
             if ((mps.type == TYPE.BSC) && (mps.id == id)) {
                 mps.refreshData(vtl.getBscSent(TYPE.BTS, id), vtl.getBscSmsCount(TYPE.BSC, id));

@@ -8,8 +8,10 @@ public class BSC extends Thread{
     int sent;
     private static int lastIndex = 0;
      int line;
+     boolean stillrun;
 
     BSC(int line){
+        this.stillrun = true;
         this.SMS = new ArrayList<>();
         this.id = ++lastIndex;
         this.line = line;
@@ -17,7 +19,7 @@ public class BSC extends Thread{
 
     @Override
     public void run() {
-        while(true){
+        while(stillrun){
             try {
                 this.sleep(3000);
             } catch (InterruptedException e) {
@@ -26,7 +28,7 @@ public class BSC extends Thread{
             pushSMS();
         }
     }
-    public void pushSMS(){
+    public synchronized void pushSMS(){
         if(SMS.size()>0){
             sent++;
             if(Structure.BSCs.length>line+1){
@@ -39,9 +41,15 @@ public class BSC extends Thread{
             Structure.BSCdataChagned(id);
         }
     }
-    public void pushALl(){
-        for (byte[] pdu:SMS) {
-            pushSMS();
+    public synchronized void pushALl(){
+        for (int i = 0;i<SMS.size();i++) {
+            if(Structure.BSCs.length>line+1){
+                Structure.bscReceiveSMS(SMS.get(0),line+1);
+                SMS.remove(0);
+            }else{
+                Structure.rightReceiveSMS(SMS.get(0));
+                SMS.remove(0);
+            }
         }
     }
     public int getSent(){

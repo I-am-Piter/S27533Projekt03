@@ -90,7 +90,7 @@ public class Structure implements ViewToLogic {
     }
 
     @Override
-    public int getVrdSmsCount(int id) {
+    public synchronized int getVrdSmsCount(int id) {
         for (VRD vrd:vrds) {
             if(vrd.id == id){
                 return vrd.SMSnum;
@@ -100,7 +100,7 @@ public class Structure implements ViewToLogic {
     }
 
     @Override
-    public int getBtsSmsCount(TYPE type, int id) {
+    public synchronized int getBtsSmsCount(TYPE type, int id) {
             for (BTS b : leftBTSs) {
                 if (b.id == id) {
                     return b.getSmsCount();
@@ -115,7 +115,7 @@ public class Structure implements ViewToLogic {
     }
 
     @Override
-    public int getBtsSent(TYPE type, int id) {
+    public synchronized int getBtsSent(TYPE type, int id) {
             for (BTS b : leftBTSs) {
                 if (b.id == id) {
                     return b.getSent();
@@ -162,9 +162,23 @@ public class Structure implements ViewToLogic {
                 layerLeastSms = tmpSMSCount;
             }
         }
-        for (BSC b : BSCs[layerWithLeastSMS]) {
-            b.pushALl();
+        boolean stillrm = true;
+        while(stillrm){
+            BSC tmp = BSCs[layerWithLeastSMS].get(0);
+            tmp.stillrun = false;
+            BSCs[layerWithLeastSMS].remove(tmp);
+            tmp.pushALl();
+            if(!(BSCs[layerWithLeastSMS].size()>0)){
+                stillrm = false;
+            }
         }
+//        for (BSC bsc : BSCs[layerWithLeastSMS]) {
+//            BSCs[layerLeastSms].remove(bsc);
+//            bsc.stillrun = false;
+//            bsc.pushALl();
+////            BSCs[layerWithLeastSMS].remove(bsc);
+////            b.pushALl();
+//        }
         for (int i = layerWithLeastSMS; i < BSCs.length - 1; i++) {
             BSCs[i] = BSCs[i + 1];
         }
@@ -178,7 +192,7 @@ public class Structure implements ViewToLogic {
     }
 
     @Override
-    public int getBscSent(TYPE bsc, int id) {
+    public synchronized int getBscSent(TYPE bsc, int id) {
             for (ArrayList<BSC> als : BSCs) {
                 for (BSC bsc2 : als) {
                     if (bsc2.id == id) {
@@ -190,7 +204,7 @@ public class Structure implements ViewToLogic {
     }
 
     @Override
-    public int getBscSmsCount(TYPE bsc, int id) {
+    public synchronized int getBscSmsCount(TYPE bsc, int id) {
             for (ArrayList<BSC> als : BSCs) {
                 for (BSC bsc2 : als) {
                     if (bsc2.id == id) {
@@ -228,7 +242,7 @@ public class Structure implements ViewToLogic {
         tmp[tmp.length-1] = bscsLine;
         BSCs = tmp;
     }
-    public static void bscReceiveSMS(byte[] sms,int warstwa){
+    public synchronized static void bscReceiveSMS(byte[] sms,int warstwa){
         int leastSMSindex = 0;
         for (int i = 1; i < BSCs[warstwa].size(); i++) {
             if (BSCs[warstwa].get(i).SMS.size() < BSCs[warstwa].get(leastSMSindex).SMS.size()) {
@@ -250,7 +264,7 @@ public class Structure implements ViewToLogic {
         BSCs[warstwa].add(newBSC);
     }
 
-    public static void leftReceiveSMS(byte[] sms){
+    public synchronized static void leftReceiveSMS(byte[] sms){
         int leastSMSindex = 0;
         for (int i = 1; i < leftBTSs.size(); i++) {
             if(leftBTSs.get(i).SMS.size() < leftBTSs.get(leastSMSindex).SMS.size()){
@@ -271,7 +285,7 @@ public class Structure implements ViewToLogic {
         ltv.BTScreated(Mode.LEFT,bts.id);
     }
 
-    public static void rightReceiveSMS(byte[] sms){
+    public synchronized static void rightReceiveSMS(byte[] sms){
         int leastSMSindex = 0;
         for (int i = 1; i < rightBTSs.size(); i++) {
             if(rightBTSs.get(i).SMS.size() < rightBTSs.get(leastSMSindex).SMS.size()){
@@ -291,7 +305,7 @@ public class Structure implements ViewToLogic {
         ltv.BTScreated(Mode.RIGHT,bts.id);
     }
 
-    public static void vrdReceiveSMS(byte[] sms){
+    public synchronized static void vrdReceiveSMS(byte[] sms){
         int number = PduConverter.extractPhoneNumberFromPdu(sms);
         for (VRD v:vrds) {
             if(v.id == number){
