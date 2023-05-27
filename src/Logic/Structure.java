@@ -307,6 +307,7 @@ public class Structure implements ViewToLogic {
 
     public synchronized static void vrdReceiveSMS(byte[] sms){
         int number = PduConverter.extractPhoneNumberFromPdu(sms);
+        System.out.println(number);
         for (VRD v:vrds) {
             if(v.id == number){
                 v.receiveSMS(sms);

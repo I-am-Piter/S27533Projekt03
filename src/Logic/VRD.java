@@ -29,6 +29,7 @@ public class VRD extends Thread{
     }
     public void receiveSMS(byte[] sms){
         SMSnum++;
+        System.out.println(PduConverter.decodeMessageFromPdu(sms));
     }
     @Override
     public void run() {
